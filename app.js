@@ -63,6 +63,11 @@ app.get('/', (req, res, next) => {
   res.render('index', {word: wordInfo});
 });
 
+app.post('/', (req, res, next) => {
+  // process the incoming letter guess
+  console.log(req.body);
+})
+
 app.listen(3000, () => {
   console.log('Word Guess Game listening on 3000!');
 });
