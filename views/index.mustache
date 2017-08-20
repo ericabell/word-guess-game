@@ -12,6 +12,10 @@
     <div class="container">
       <h1>Word Guessing Game</h1>
 
+      {{#errors}}
+        <p class='error'>{{param}}, {{msg}}, {{value}}</p>
+      {{/errors}}
+
 
       <div class="letter-blanks-container">
         {{#word}}

@@ -46,3 +46,7 @@ h1 {
   justify-content: center;
   margin: 15px;
 }
+
+.error {
+  color: rgb(233, 58, 58);
+}

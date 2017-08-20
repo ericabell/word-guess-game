@@ -6,6 +6,7 @@ const assert = require('assert');
 const mustacheExpress = require('mustache-express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 // load our words from a data file
 const words = require('./words');
@@ -18,7 +19,10 @@ app.use(express.static('public'));
 
 // set up our logging using morgan
 app.use(morgan('tiny'));
+
+// body-parser and express validator
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 
 // set up the express-session store to use MongoDB
 let store = new mongoDBStore(
@@ -52,10 +56,11 @@ app.set('views', __dirname + '/views');
 // ****************************************************************************
 // BEGIN ROUTES
 
+let wordInfo = [];
+
 app.get('/', (req, res, next) => {
   let randomWord = 'laundry';
   let randomWordAsList = randomWord.split('');
-  let wordInfo = [];
   randomWordAsList.forEach( (letter) => {
     wordInfo.push({letter: letter, guessed: false});
   });
@@ -66,6 +71,24 @@ app.get('/', (req, res, next) => {
 app.post('/', (req, res, next) => {
   // process the incoming letter guess
   console.log(req.body);
+  // make sure it is a single letter
+  req.checkBody('letter', 'Not a letter').isAlpha();
+  req.checkBody('letter', 'Too long').isLength({min:1, max:1});
+
+  req.getValidationResult()
+    .then( (result) => {
+      if( !result.isEmpty() ) {
+        // validation errors
+        console.log('validation errors');
+        console.log(result);
+        res.render('index', {word: wordInfo, errors: result.array()})
+      } else {
+        // validation passed
+        console.log('validation passed');
+        res.render('index', {word: wordInfo});
+      }
+    })
+
 })
 
 app.listen(3000, () => {
