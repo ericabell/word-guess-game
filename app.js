@@ -7,6 +7,9 @@ const mustacheExpress = require('mustache-express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
+// load our words from a data file
+const words = require('./words');
+
 // create our Express app
 let app = express();
 
