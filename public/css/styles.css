@@ -31,14 +31,14 @@ h1 {
 
 .letter-unguessed {
   margin: 0 10px;
-  color: rgb(54, 54, 54); /* set to transparent to hide letter */
+  color: transparent;
   border-bottom-style: solid;
   border-bottom-width: 1px;
   border-bottom-color: rgb(135, 135, 135)
 }
 
 .letter-guessed {
-
+  color: rgb(54, 54, 54); /* set to transparent to hide letter */
 }
 
 .letter-submit-form {

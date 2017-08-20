@@ -15,9 +15,17 @@
 
       <div class="letter-blanks-container">
         {{#word}}
-          <div class="letter-unguessed">
-            {{.}}
+          {{#guessed}}
+          <div class="letter-guessed">
+            {{letter}}
           </div>
+          {{/guessed}}
+          
+          {{^guessed}}
+          <div class="letter-unguessed">
+            {{letter}}
+          </div>
+          {{/guessed}}
         {{/word}}
       </div>
 

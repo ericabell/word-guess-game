@@ -53,9 +53,14 @@ app.set('views', __dirname + '/views');
 // BEGIN ROUTES
 
 app.get('/', (req, res, next) => {
-  let randomWord = 'magical';
+  let randomWord = 'laundry';
   let randomWordAsList = randomWord.split('');
-  res.render('index', {word: randomWordAsList});
+  let wordInfo = [];
+  randomWordAsList.forEach( (letter) => {
+    wordInfo.push({letter: letter, guessed: false});
+  });
+  wordInfo[3].guessed = true;
+  res.render('index', {word: wordInfo});
 });
 
 app.listen(3000, () => {
