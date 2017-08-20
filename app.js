@@ -64,7 +64,6 @@ app.get('/', (req, res, next) => {
   randomWordAsList.forEach( (letter) => {
     wordInfo.push({letter: letter, guessed: false});
   });
-  wordInfo[3].guessed = true;
   res.render('index', {word: wordInfo});
 });
 
@@ -79,12 +78,23 @@ app.post('/', (req, res, next) => {
     .then( (result) => {
       if( !result.isEmpty() ) {
         // validation errors
-        console.log('validation errors');
-        console.log(result);
         res.render('index', {word: wordInfo, errors: result.array()})
       } else {
         // validation passed
-        console.log('validation passed');
+        // check if the letter has already been guessed or not
+        wordInfo.forEach( (letter) => {
+          if( letter.letter === req.body.letter ) {
+            if( letter.guessed === false ) {
+              // user guessed one of the letters
+              letter.guessed = true;
+            } else {
+              // user had already guessed this letter
+
+            }
+          } else {
+
+          }
+        })
         res.render('index', {word: wordInfo});
       }
     })
