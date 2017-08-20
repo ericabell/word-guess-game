@@ -94,9 +94,7 @@ app.post('/', (req, res, next) => {
               // user had already guessed this letter
               shouldDecrementCounter = false
             }
-          } else {
-
-          }
+          } 
         })
         if( shouldDecrementCounter === true ) {
           guessCounter -= 1;
