@@ -57,6 +57,7 @@ app.set('views', __dirname + '/views');
 // BEGIN ROUTES
 
 let wordInfo = [];
+let guessCounter = 5;
 
 app.get('/', (req, res, next) => {
   let randomWord = 'laundry';
@@ -64,7 +65,7 @@ app.get('/', (req, res, next) => {
   randomWordAsList.forEach( (letter) => {
     wordInfo.push({letter: letter, guessed: false});
   });
-  res.render('index', {word: wordInfo});
+  res.render('index', {word: wordInfo, counter: guessCounter});
 });
 
 app.post('/', (req, res, next) => {
@@ -78,24 +79,29 @@ app.post('/', (req, res, next) => {
     .then( (result) => {
       if( !result.isEmpty() ) {
         // validation errors
-        res.render('index', {word: wordInfo, errors: result.array()})
+        res.render('index', {word: wordInfo, counter: guessCounter, errors: result.array()})
       } else {
         // validation passed
         // check if the letter has already been guessed or not
+        let shouldDecrementCounter = true;
         wordInfo.forEach( (letter) => {
           if( letter.letter === req.body.letter ) {
             if( letter.guessed === false ) {
               // user guessed one of the letters
               letter.guessed = true;
+              shouldDecrementCounter = false;
             } else {
               // user had already guessed this letter
-
+              shouldDecrementCounter = false
             }
           } else {
 
           }
         })
-        res.render('index', {word: wordInfo});
+        if( shouldDecrementCounter === true ) {
+          guessCounter -= 1;
+        }
+        res.render('index', {word: wordInfo, counter: guessCounter});
       }
     })
 
