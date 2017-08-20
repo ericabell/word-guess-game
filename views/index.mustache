@@ -14,18 +14,18 @@
 
 
       <div class="letter-blanks-container">
-        <div class="letter-unguessed">
-          A
-        </div>
-        <div class="letter-unguessed">
-          B
-        </div>
-        <div class="letter-unguessed">
-          C
-        </div>
-        <div class="letter-unguessed">
-          D
-        </div>
+        {{#word}}
+          <div class="letter-unguessed">
+            {{.}}
+          </div>
+        {{/word}}
+      </div>
+
+      <div class="letter-submit-form">
+        <form class="" action="/guess" method="post">
+          <label for="letter"></label><input type="text" name="letter" value="">
+          <input type="submit" name="letter-guess" value="Guess">
+        </form>
       </div>
 
     </div>

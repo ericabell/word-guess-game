@@ -40,3 +40,9 @@ h1 {
 .letter-guessed {
 
 }
+
+.letter-submit-form {
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+}
