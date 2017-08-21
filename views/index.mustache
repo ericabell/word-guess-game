@@ -12,16 +12,16 @@
     <div class="container">
       <h1>Word Guessing Game</h1>
 
-      {{#errors}}
+      {{#validationErrors}}
         <p class='error'>{{param}}, {{msg}}, {{value}}</p>
-      {{/errors}}
+      {{/validationErrors}}
 
       <div class="guesses-remaining-container">
-        Guesses Remaining: {{counter}}
+        Guesses Remaining: {{guessesRemaining}}
       </div>
 
       <div class="letter-blanks-container">
-        {{#word}}
+        {{#wordAsList}}
           {{#guessed}}
           <div class="letter-guessed">
             {{letter}}
@@ -33,7 +33,7 @@
             {{letter}}
           </div>
           {{/guessed}}
-        {{/word}}
+        {{/wordAsList}}
       </div>
 
       <div class="letter-submit-form">

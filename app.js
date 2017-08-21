@@ -56,16 +56,24 @@ app.set('views', __dirname + '/views');
 // ****************************************************************************
 // BEGIN ROUTES
 
-let wordInfo = [];
-let guessCounter = 5;
+app.use( (req, res, next) => {
+  // check for req.session
+  if( !req.session.game ) {
+    // never seen this person before, we need to create a new game
+    console.log('=> need to create new game');
+    createNewGame(req);
+    next();
+  } else {
+    // game is in progress...
+    console.log('=> game is in progress');
+    req.session.game.validationErrors = [];
+    next();
+  }
+})
 
 app.get('/', (req, res, next) => {
-  let randomWord = 'laundry';
-  let randomWordAsList = randomWord.split('');
-  randomWordAsList.forEach( (letter) => {
-    wordInfo.push({letter: letter, guessed: false});
-  });
-  res.render('index', {word: wordInfo, counter: guessCounter});
+  console.log(req.session.game);
+  res.render('index', req.session.game);
 });
 
 app.post('/', (req, res, next) => {
@@ -79,27 +87,24 @@ app.post('/', (req, res, next) => {
     .then( (result) => {
       if( !result.isEmpty() ) {
         // validation errors
-        res.render('index', {word: wordInfo, counter: guessCounter, errors: result.array()})
+        req.session.game.validationErrors = result.array();
+        res.render('index', req.session.game)
       } else {
-        // validation passed
-        // check if the letter has already been guessed or not
-        let shouldDecrementCounter = true;
-        wordInfo.forEach( (letter) => {
-          if( letter.letter === req.body.letter ) {
-            if( letter.guessed === false ) {
-              // user guessed one of the letters
-              letter.guessed = true;
-              shouldDecrementCounter = false;
-            } else {
-              // user had already guessed this letter
-              shouldDecrementCounter = false
-            }
-          } 
-        })
-        if( shouldDecrementCounter === true ) {
-          guessCounter -= 1;
+        // our guess is valid
+        if( uniqueGuess(req.session.game, req.body.letter) ) {
+          // is the letter in the word
+          if( checkAndUpdateLetter(req.session.game, req.body.letter) ) {
+            // letter matched
+            res.render('index', req.session.game);
+          } else {
+            // letter didn't match
+            req.session.game.guessesRemaining -= 1;
+            res.render('index', req.session.game);
+          }
+        } else {
+          // our guess had been made before
+          res.render('index', req.session.game);
         }
-        res.render('index', {word: wordInfo, counter: guessCounter});
       }
     })
 
@@ -108,3 +113,46 @@ app.post('/', (req, res, next) => {
 app.listen(3000, () => {
   console.log('Word Guess Game listening on 3000!');
 });
+
+
+// helper functions
+
+function createNewGame( req ) {
+  // we need to initialize req.session with game information
+  req.session.game = {
+    word: 'laundry',
+    wordAsList : [
+      {'letter': 'l', 'guessed': false},
+      {'letter': 'a', 'guessed': false},
+      {'letter': 'u', 'guessed': false},
+      {'letter': 'n', 'guessed': false},
+      {'letter': 'd', 'guessed': false},
+      {'letter': 'r', 'guessed': false},
+      {'letter': 'y', 'guessed': false},
+    ],
+    lettersGuessed : [],
+    guessesRemaining: 5,
+    validationErrors: [],
+  };
+}
+
+function uniqueGuess(game, letter) {
+  // look for letter in list of lettersGuessed
+  if( game.lettersGuessed.indexOf(letter) >= 0 ) {
+    return false;
+  }
+  return true;
+}
+
+function checkAndUpdateLetter(game, guessedLetter) {
+  let didGuessMatchLetter = false;
+  game.lettersGuessed.push(guessedLetter);
+
+  game.wordAsList.forEach( (letter) => {
+    if( letter.letter === guessedLetter ) {
+      letter.guessed = true;
+      didGuessMatchLetter = true;
+    }
+  })
+  return didGuessMatchLetter;
+}
