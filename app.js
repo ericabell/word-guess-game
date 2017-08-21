@@ -95,6 +95,12 @@ app.post('/', (req, res, next) => {
           // is the letter in the word
           if( checkAndUpdateLetter(req.session.game, req.body.letter) ) {
             // letter matched
+            // have we matched all the letters?
+            if( checkAllLetters(req.session.game) ) {
+              // update the state to won
+              req.session.game.stateWon = true;
+              req.session.game.stateInProgress = false;
+            }
             res.render('index', req.session.game);
           } else {
             // letter didn't match
@@ -158,4 +164,15 @@ function checkAndUpdateLetter(game, guessedLetter) {
     }
   })
   return didGuessMatchLetter;
+}
+
+function checkAllLetters(game) {
+  let result = true;
+  for(let i=0; i<game.wordAsList.length; i++) {
+    if( game.wordAsList[i].guessed === false ) {
+      result = false;
+    }
+  }
+  console.log(`checkAllLetters returns: ${result}.`);
+  return result;
 }
