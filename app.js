@@ -120,6 +120,9 @@ app.listen(3000, () => {
 function createNewGame( req ) {
   // we need to initialize req.session with game information
   req.session.game = {
+    stateInProgress: true,
+    stateWon: false,
+    stateLost: false,
     word: 'laundry',
     wordAsList : [
       {'letter': 'l', 'guessed': false},

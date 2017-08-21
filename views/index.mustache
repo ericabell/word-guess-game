@@ -16,32 +16,43 @@
         <p class='error'>{{param}}, {{msg}}, {{value}}</p>
       {{/validationErrors}}
 
-      <div class="guesses-remaining-container">
-        Guesses Remaining: {{guessesRemaining}}
-      </div>
+      {{#stateInProgress}}
+        <div class="guesses-remaining-container">
+          Guesses Remaining: {{guessesRemaining}}
+        </div>
 
-      <div class="letter-blanks-container">
-        {{#wordAsList}}
-          {{#guessed}}
-          <div class="letter-guessed">
-            {{letter}}
-          </div>
-          {{/guessed}}
+        <div class="letter-blanks-container">
+          {{#wordAsList}}
+            {{#guessed}}
+            <div class="letter-guessed">
+              {{letter}}
+            </div>
+            {{/guessed}}
 
-          {{^guessed}}
-          <div class="letter-unguessed">
-            {{letter}}
-          </div>
-          {{/guessed}}
-        {{/wordAsList}}
-      </div>
+            {{^guessed}}
+            <div class="letter-unguessed">
+              {{letter}}
+            </div>
+            {{/guessed}}
+          {{/wordAsList}}
+        </div>
 
-      <div class="letter-submit-form">
-        <form class="" action="/" method="post">
-          <label for="letter"></label><input type="text" name="letter" value="">
-          <input type="submit" name="letter-guess" value="Guess">
-        </form>
-      </div>
+        <div class="letter-submit-form">
+          <form class="" action="/" method="post">
+            <label for="letter"></label><input type="text" name="letter" value="">
+            <input type="submit" name="letter-guess" value="Guess">
+          </form>
+        </div>
+      {{/stateInProgress}}
+
+      {{#stateWon}}
+          <h1>You Won!</h1>
+      {{/stateWon}}
+
+      {{#stateLost}}
+          <h1>You Lost!</h1>
+          <p>Do you want to play again?</p>
+      {{/stateLost}}
 
     </div>
 
