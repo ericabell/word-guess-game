@@ -1,14 +1,14 @@
 // words for our hangman game
 
 words = [
-  {word: 'elephant', category: 'animal'},
-  {word: 'owl', category: 'animal'},
-  {word: 'caterpillar', category: 'animal'},
-  {word: 'penguin', category: 'animal'},
-  {word: 'austin', category: 'US city'},
-  {word: 'dallas', category: 'US city'},
-  {word: 'houston', category: 'US city'},
-  {word: 'seattle', category: 'US city'},
+  {word: 'elephant', category: 'animal', difficulty: 'hard'},
+  {word: 'owl', category: 'animal', difficulty: 'easy'},
+  {word: 'caterpillar', category: 'animal', difficulty: 'hard'},
+  {word: 'penguin', category: 'animal', difficulty: 'hard'},
+  {word: 'austin', category: 'US city', difficulty: 'medium'},
+  {word: 'dallas', category: 'US city', difficulty: 'medium'},
+  {word: 'houston', category: 'US city', difficulty: 'hard'},
+  {word: 'seattle', category: 'US city', difficulty: 'hard'},
 
 ]
 

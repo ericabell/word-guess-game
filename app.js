@@ -122,6 +122,12 @@ app.post('/', (req, res, next) => {
 
 })
 
+app.get('/again', (req, res, next) => {
+  // clear out the user's session
+  req.session.game = null;
+  res.redirect('/');
+})
+
 app.listen(3000, () => {
   console.log('Word Guess Game listening on 3000!');
 });
