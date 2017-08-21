@@ -105,6 +105,12 @@ app.post('/', (req, res, next) => {
           } else {
             // letter didn't match
             req.session.game.guessesRemaining -= 1;
+            console.log(`guessesRemaining: ${req.session.game.guessesRemaining}`);
+            if( req.session.game.guessesRemaining <= 0 ) {
+              // the game is over, change state
+              req.session.game.stateLost = true;
+              req.session.game.stateInProgress = false;
+            }
             res.render('index', req.session.game);
           }
         } else {
