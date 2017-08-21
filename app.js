@@ -126,6 +126,10 @@ app.get('/again', (req, res, next) => {
   // clear out the user's session
   req.session.game = null;
   res.redirect('/');
+});
+
+app.get('/highscores', (req, res, next) => {
+  res.render('highscores');
 })
 
 app.listen(3000, () => {
