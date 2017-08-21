@@ -135,20 +135,20 @@ function createNewGame( req ) {
     stateInProgress: true,
     stateWon: false,
     stateLost: false,
-    word: 'laundry',
-    wordAsList : [
-      {'letter': 'l', 'guessed': false},
-      {'letter': 'a', 'guessed': false},
-      {'letter': 'u', 'guessed': false},
-      {'letter': 'n', 'guessed': false},
-      {'letter': 'd', 'guessed': false},
-      {'letter': 'r', 'guessed': false},
-      {'letter': 'y', 'guessed': false},
-    ],
+    word: '',
+    wordAsList : [],
     lettersGuessed : [],
     guessesRemaining: 5,
     validationErrors: [],
   };
+
+  // choose a word at random
+  let word = words[Math.floor(Math.random()*(words.length-1))].word;
+  req.session.game.wordAsList = [];
+  word.split('').forEach( (letter) => {
+    req.session.game.wordAsList.push({'letter': letter, 'guessed': false});
+  });
+
 }
 
 function uniqueGuess(game, letter) {
