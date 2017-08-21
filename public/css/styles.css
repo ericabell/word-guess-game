@@ -23,9 +23,16 @@ h1 {
   text-align: center;
 }
 
+.category-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
 .guesses-remaining-container {
   display: flex;
   justify-content: center;
+  margin: 10px;
 }
 
 .letter-blanks-container {

@@ -135,6 +135,7 @@ function createNewGame( req ) {
     stateInProgress: true,
     stateWon: false,
     stateLost: false,
+    category: '',
     word: '',
     wordAsList : [],
     lettersGuessed : [],
@@ -143,9 +144,13 @@ function createNewGame( req ) {
   };
 
   // choose a word at random
-  let word = words[Math.floor(Math.random()*(words.length-1))].word;
+  let randInt = Math.floor(Math.random()*(words.length-1));
+  req.session.game.word = words[randInt].word;
+  req.session.game.category = words[randInt].category;
+  console.log(req.session.game);
+
   req.session.game.wordAsList = [];
-  word.split('').forEach( (letter) => {
+  req.session.game.word.split('').forEach( (letter) => {
     req.session.game.wordAsList.push({'letter': letter, 'guessed': false});
   });
 
