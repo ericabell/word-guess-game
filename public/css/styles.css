@@ -63,6 +63,15 @@ h1 {
   margin: 15px;
 }
 
+.user-input-letter {
+  display: flex;
+  justify-content: center;
+  height: 300px;
+  width: 300px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 36pt;
+}
+
 .error {
   color: rgb(233, 58, 58);
 }
