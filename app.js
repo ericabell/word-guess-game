@@ -59,7 +59,7 @@ app.set('views', __dirname + '/views');
 app.use( (req, res, next) => {
   // check for req.session
   if( !req.session.game ) {
-    // never seen this person before, we need to create a new game
+    // no game is in session
     console.log('=> need to create new game');
     createNewGame(req);
     next();
@@ -80,14 +80,14 @@ app.post('/', (req, res, next) => {
   // process the incoming letter guess
   console.log(req.body);
   // make sure it is a single letter
-  req.checkBody('letter', 'Not a letter').isAlpha();
-  req.checkBody('letter', 'Too long').isLength({min:1, max:1});
+  req.checkBody('letter', 'not a letter').isAlpha();
+  req.checkBody('letter', 'too long').isLength({min:1, max:1});
 
   req.getValidationResult()
     .then( (result) => {
       if( !result.isEmpty() ) {
         // validation errors
-        req.session.game.validationErrors = result.array();
+        req.session.game.validationErrors = result.array()[0];
         res.render('index', req.session.game)
       } else {
         // our guess is valid
@@ -99,6 +99,7 @@ app.post('/', (req, res, next) => {
             if( checkAllLetters(req.session.game) ) {
               // update the state to won
               req.session.game.stateWon = true;
+              updateHistory(req.session.game, 'win');
               req.session.game.stateInProgress = false;
             }
             res.render('index', req.session.game);
@@ -109,6 +110,7 @@ app.post('/', (req, res, next) => {
             if( req.session.game.guessesRemaining <= 0 ) {
               // the game is over, change state
               req.session.game.stateLost = true;
+              updateHistory(req.session.game, 'loss');
               req.session.game.stateInProgress = false;
             }
             res.render('index', req.session.game);
@@ -124,7 +126,7 @@ app.post('/', (req, res, next) => {
 
 app.get('/again', (req, res, next) => {
   // clear out the user's session
-  req.session.game = null;
+  askForNewGame(req);
   res.redirect('/');
 });
 
@@ -151,6 +153,11 @@ function createNewGame( req ) {
     lettersGuessed : [],
     guessesRemaining: 5,
     validationErrors: [],
+    history: {
+      exists: false,
+      wins: 0,
+      losses: 0
+    }
   };
 
   // choose a word at random
@@ -163,7 +170,25 @@ function createNewGame( req ) {
   req.session.game.word.split('').forEach( (letter) => {
     req.session.game.wordAsList.push({'letter': letter, 'guessed': false});
   });
+}
 
+function askForNewGame( req ) {
+  req.session.game.stateInProgress = true;
+  req.session.game.stateWon = false;
+  req.session.game.stateLost = false;
+  req.session.game.lettersGuessed = [];
+  req.session.game.guessesRemaining = 5;
+  req.session.game.validationErrors = [];
+  // choose a word at random
+  let randInt = Math.floor(Math.random()*(words.length-1));
+  req.session.game.word = words[randInt].word;
+  req.session.game.category = words[randInt].category;
+  console.log(req.session.game);
+
+  req.session.game.wordAsList = [];
+  req.session.game.word.split('').forEach( (letter) => {
+    req.session.game.wordAsList.push({'letter': letter, 'guessed': false});
+  });
 }
 
 function uniqueGuess(game, letter) {
@@ -196,4 +221,18 @@ function checkAllLetters(game) {
   }
   console.log(`checkAllLetters returns: ${result}.`);
   return result;
+}
+
+function updateHistory(game, outcome) {
+  // this gets called after every win or loss
+  // check if history exists, set it to true if it doesn't
+  if( !game.history.exists ) {
+    game.history.exists = true;
+  }
+  // update win or loss count
+  if( outcome === 'win' ) {
+    game.history.wins += 1;
+  } else if( outcome === 'loss' ) {
+    game.history.losses += 1;
+  }
 }
