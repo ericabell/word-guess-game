@@ -136,6 +136,8 @@ app.use( (req, res, next) => {
 })
 
 app.get('/', (req, res, next) => {
+  // log the word so we can always cheat.
+  console.log(`Your word is ${req.session.game.word}`);
   if( req.user ) {
     // grab the username from twitter
     // req.session.passport.user is _id in mongoose
@@ -163,6 +165,7 @@ app.post('/', (req, res, next) => {
       if( !result.isEmpty() ) {
         // validation errors
         req.session.game.validationErrors = result.array()[0];
+        console.log(req.session.game.validationErrors);
         res.render('index', req.session.game)
       } else {
         // our guess is valid
