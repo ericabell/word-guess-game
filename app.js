@@ -139,7 +139,6 @@ app.get('/', (req, res, next) => {
   if( req.user ) {
     // grab the username from twitter
     // req.session.passport.user is _id in mongoose
-    // TODO: might just just req.user instead of mongoose query...
     // req.user just contains the _id as well.
     TwitterUser.find({_id: ObjectId(req.user)})
       .then( (docs) => {
