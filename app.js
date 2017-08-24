@@ -105,6 +105,9 @@ passport.deserializeUser(function(id, done) {
     done(null, id);
 });
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // ****************************************************************************
 // BEGIN ROUTES
 
