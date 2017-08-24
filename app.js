@@ -127,8 +127,17 @@ app.use( (req, res, next) => {
 })
 
 app.get('/', (req, res, next) => {
-  console.log(req.session.game);
-  res.render('index', req.session.game);
+  if( req.session && req.session.passport ) {
+    // grab the username from twitter
+    // req.session.passport.user is _id in mongoose
+    TwitterUser.find({_id: ObjectId(req.session.passport.user)})
+      .then( (docs) => {
+        req.session.game.userName = docs[0].displayName;
+        res.render('index', req.session.game);
+      })
+  } else {
+    res.render('index', req.session.game);
+  }
 });
 
 app.post('/', (req, res, next) => {
@@ -213,7 +222,7 @@ app.listen(3000, () => {
 function createNewGame( req ) {
   // we need to initialize req.session with game information
   req.session.game = {
-    username: 'Anonymous User',
+    userName: 'Anonymous User',
     stateInProgress: true,
     stateWon: false,
     stateLost: false,
