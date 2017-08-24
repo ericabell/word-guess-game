@@ -30,6 +30,9 @@ app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 
+// connect to mongoose for twitter user store
+mongoose.connect('mongodb://localhost:27017/twitter', {useMongoClient: true});
+
 // set up the express-session store to use MongoDB
 let store = new mongoDBStore(
   {
@@ -74,6 +77,7 @@ passport.use(new TwitterStrategy({
 
         console.log(profile);
         // save twitter user data into mongoose
+        console.log('About to save twitter data into mongoose');
         TwitterUser.findOrCreate({
           provider: profile.provider,
           providerId: profile.id
@@ -87,6 +91,7 @@ passport.use(new TwitterStrategy({
           console.log('Data saved to mongo!');
           done(null, user);
         });
+        console.log('After TwitterUser.findorcreate');
     }
 ));
 passport.serializeUser(function(user, done) {
@@ -175,7 +180,7 @@ app.get('/reset', (req, res, next) => {
   req.session.game.history.wins = 0;
   req.session.game.history.losses = 0;
   res.redirect('/');
-})
+});
 
 app.get('/again', (req, res, next) => {
   // clear out the user's session
@@ -185,7 +190,15 @@ app.get('/again', (req, res, next) => {
 
 app.get('/highscores', (req, res, next) => {
   res.render('highscores');
-})
+});
+
+app.get('/auth/twitter', passport.authenticate('twitter'));
+app.get('/auth/twitter/callback',
+  passport.authenticate('twitter', {
+    successRedirect: '/',
+    failureRedirect: '/auth/twitter'
+}));
+
 
 app.listen(3000, () => {
   console.log('Word Guess Game listening on 3000!');
@@ -197,6 +210,7 @@ app.listen(3000, () => {
 function createNewGame( req ) {
   // we need to initialize req.session with game information
   req.session.game = {
+    username: 'Anonymous User',
     stateInProgress: true,
     stateWon: false,
     stateLost: false,
