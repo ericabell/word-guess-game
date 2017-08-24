@@ -71,13 +71,13 @@ passport.use(new TwitterStrategy({
     },
     function (token, tokenSecret, profile, done) {
         // function to get a user from the returned data
-        console.log('get user from the returned data');
-        console.log(token);
-        console.log(tokenSecret);
-
-        console.log(profile);
+        // console.log('get user from the returned data');
+        // console.log(token);
+        // console.log(tokenSecret);
+        //
+        // console.log(profile);
         // save twitter user data into mongoose
-        console.log('About to save twitter data into mongoose');
+        // console.log('About to save twitter data into mongoose');
         TwitterUser.findOrCreate({
           provider: profile.provider,
           providerId: profile.id
@@ -88,10 +88,10 @@ passport.use(new TwitterStrategy({
           if (err) {
             return done(err);
           }
-          console.log('Data saved to mongo!');
+          // console.log('Data saved to mongo!');
           done(null, user);
         });
-        console.log('After TwitterUser.findorcreate');
+        // console.log('After TwitterUser.findorcreate');
     }
 ));
 passport.serializeUser(function(user, done) {
@@ -107,6 +107,15 @@ passport.deserializeUser(function(id, done) {
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// to protect certain routes, we need to apply some middleware
+const requireLogin = function(req, res, next) {
+  if(req.user) {
+    next();
+  } else {
+    res.send('You do not have access yet. Try logging in.');
+  }
+}
 
 // ****************************************************************************
 // BEGIN ROUTES
@@ -127,15 +136,18 @@ app.use( (req, res, next) => {
 })
 
 app.get('/', (req, res, next) => {
-  if( req.session && req.session.passport ) {
+  if( req.user ) {
     // grab the username from twitter
     // req.session.passport.user is _id in mongoose
-    TwitterUser.find({_id: ObjectId(req.session.passport.user)})
+    // TODO: might just just req.user instead of mongoose query...
+    // req.user just contains the _id as well.
+    TwitterUser.find({_id: ObjectId(req.user)})
       .then( (docs) => {
         req.session.game.userName = docs[0].displayName;
         res.render('index', req.session.game);
       })
   } else {
+    req.session.game.userName = 'Anonymous User';
     res.render('index', req.session.game);
   }
 });
@@ -210,6 +222,15 @@ app.get('/auth/twitter/callback',
     successRedirect: '/',
     failureRedirect: '/auth/twitter'
 }));
+
+app.get('/logout', (req, res, next) => {
+  req.logout();
+  res.redirect('/');
+});
+
+app.get('/protected', requireLogin, (req, res, next) => {
+  res.send('you have reached the protected page!');
+});
 
 
 app.listen(3000, () => {
