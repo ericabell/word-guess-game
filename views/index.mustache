@@ -2,11 +2,19 @@
       <div class="row justify-content-between">
         <div class="col-6">
           {{#history.exists}}
-          Wins: {{history.wins}} and Losses: {{history.losses}} <a href="#">Reset</a>
+          Wins: {{history.wins}} and Losses: {{history.losses}}
           {{/history.exists}}
         </div>
         <div class="col-6 flush-right">
           Welcome, Anonymous User!
+        </div>
+      </div>
+      <div class="row justify-content-between">
+        <div class="col-4 small">
+          <a href="http://localhost:3000/reset">Reset Counters</a>
+        </div>
+        <div class="col-4 flush-right small">
+          <a href="">Authenticate with Twitter</a>
         </div>
       </div>
 
@@ -19,14 +27,15 @@
       {{/validationErrors}}
 
       {{#stateInProgress}}
-        <div class="category-container">
+      <div class="row justify-content-around">
+        <div class="col-4">
           Category: {{category}}
         </div>
 
-        <div class="guesses-remaining-container">
+        <div class="col-4">
           Guesses Remaining: {{guessesRemaining}}
         </div>
-
+      </div>
         <div class="letter-blanks-container">
           {{#wordAsList}}
             {{#guessed}}
@@ -49,6 +58,15 @@
             <input type="submit" name="letter-guess" value="Guess">
           </form>
         </div> -->
+
+        <div class="guessed-letters">
+          Letters Guessed So Far:
+          <p id="guessed-letter-list">
+            {{#lettersGuessed}}
+              {{.}}
+            {{/lettersGuessed}}
+          </p>
+        </div>
 
         <div class="user-input-letter">
 

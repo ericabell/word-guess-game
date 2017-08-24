@@ -125,6 +125,12 @@ app.post('/', (req, res, next) => {
 
 })
 
+app.get('/reset', (req, res, next) => {
+  req.session.game.history.wins = 0;
+  req.session.game.history.losses = 0;
+  res.redirect('/');
+})
+
 app.get('/again', (req, res, next) => {
   // clear out the user's session
   askForNewGame(req);
