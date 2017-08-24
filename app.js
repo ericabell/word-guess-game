@@ -51,6 +51,7 @@ app.use(session({
 // set up our template engine - mustache
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
+app.set('layout', 'layout');
 app.set('views', __dirname + '/views');
 
 // ****************************************************************************

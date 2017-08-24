@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Word Guess Game</title>
-
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/normalize/7.0.0/normalize.css">
-    <link rel="stylesheet" href="css/styles.css">
-  </head>
-  <body>
     <div class="container">
-      {{#history.exists}}
-      Wins: {{history.wins}} and Losses: {{history.losses}} <a href="#">Reset</a>
-      {{/history.exists}}
+      <div class="row justify-content-between">
+        <div class="col-6">
+          {{#history.exists}}
+          Wins: {{history.wins}} and Losses: {{history.losses}} <a href="#">Reset</a>
+          {{/history.exists}}
+        </div>
+        <div class="col-6 flush-right">
+          Welcome, Anonymous User!
+        </div>
+      </div>
+
 
       <h1>Word Guessing Game</h1>
 
@@ -72,7 +69,3 @@
       {{/stateLost}}
 
     </div>
-
-    <script src="js/script.js" charset="utf-8"></script>
-  </body>
-</html>

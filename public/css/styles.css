@@ -75,3 +75,7 @@ h1 {
 .error {
   color: rgb(233, 58, 58);
 }
+
+.flush-right {
+  text-align: right;
+}
