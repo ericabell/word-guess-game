@@ -1,12 +1,18 @@
-const express = require('express');
-const session = require('express-session');
-const mongoDBStore = require('connect-mongodb-session')(session);
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-const mustacheExpress = require('mustache-express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const expressValidator = require('express-validator');
+const express = require('express'),
+      session = require('express-session'),
+      mongoDBStore = require('connect-mongodb-session')(session),
+      MongoClient = require('mongodb').MongoClient,
+      assert = require('assert'),
+      mustacheExpress = require('mustache-express'),
+      morgan = require('morgan'),
+      bodyParser = require('body-parser'),
+      expressValidator = require('express-validator'),
+      passport = require('passport'),
+      TwitterStrategy = require('passport-twitter').Strategy,
+      mongoose = require('mongoose'),
+      findOrCreate = require('mongoose-findorcreate'),
+      ObjectId = require('mongodb').ObjectID,
+      TwitterUser = require('./models/TwitterUser');
 
 // load our words from a data file
 const words = require('./words');
@@ -53,6 +59,46 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('layout', 'layout');
 app.set('views', __dirname + '/views');
+
+// configure passport to use the TwitterStrategy, if needed
+passport.use(new TwitterStrategy({
+        consumerKey: process.env.TWITTER_API_KEY,
+        consumerSecret: process.env.TWITTER_API_SECRET,
+        callbackURL: "http://localhost:3000/auth/twitter/callback"
+    },
+    function (token, tokenSecret, profile, done) {
+        // function to get a user from the returned data
+        console.log('get user from the returned data');
+        console.log(token);
+        console.log(tokenSecret);
+
+        console.log(profile);
+        // save twitter user data into mongoose
+        TwitterUser.findOrCreate({
+          provider: profile.provider,
+          providerId: profile.id
+        }, {
+          displayName: profile.displayName
+        },
+        function( err, user ) {
+          if (err) {
+            return done(err);
+          }
+          console.log('Data saved to mongo!');
+          done(null, user);
+        });
+    }
+));
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    // User.findById(id, function(err, user) {
+    //     done(err, user);
+    // });
+    done(null, id);
+});
 
 // ****************************************************************************
 // BEGIN ROUTES
