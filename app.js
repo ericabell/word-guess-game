@@ -285,7 +285,7 @@ app.get('/followers', (req, res, next) => {
     response.users.forEach( (user) => {
       listOfFollowers.push(user.name);
     })
-    console.log(listOfFollowers);
+    // console.log(listOfFollowers);
     res.render('followers', {followers: listOfFollowers});
   })
 })
