@@ -190,6 +190,7 @@ app.post('/guess', (req, res, next) => {
               req.session.game.stateWon = true;
               updateHistory(req.session.game, 'win');
               req.session.game.stateInProgress = false;
+              console.log('About to redirect to /win');
               res.redirect('/win');
             } else {
               res.render('index', req.session.game);

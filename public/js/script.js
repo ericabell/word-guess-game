@@ -28,9 +28,9 @@ document.addEventListener('keypress', (e) => {
 
   // refresh the page after a short wait
   // which prevents race condition
-  // setTimeout( ()=> {
-  //   console.log('reloading: ' + window.location);
-  //   window.location.reload();
-  // } , 1000);
+  setTimeout( ()=> {
+    console.log('reloading: ' + window.location);
+    window.location.reload();
+  } , 1000);
 
 })
