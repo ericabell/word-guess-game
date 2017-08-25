@@ -27,5 +27,5 @@ document.addEventListener('keypress', (e) => {
   XHR.send(urlEncodedData);
 
   // refresh the page
-  window.location.reload();
+  // window.location.reload();
 })
