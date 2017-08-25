@@ -90,6 +90,8 @@ app.post('/', (req, res, next) => {
         req.session.game.validationErrors = result.array()[0];
         res.render('index', req.session.game)
       } else {
+        // make sure it is lower case
+        req.body.letter = req.body.letter.toLowerCase();
         // our guess is valid
         if( uniqueGuess(req.session.game, req.body.letter) ) {
           // is the letter in the word
