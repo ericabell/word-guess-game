@@ -130,7 +130,7 @@ app.use( (req, res, next) => {
   } else {
     // game is in progress...
     console.log('=> game is in progress');
-    req.session.game.validationErrors = [];
+    // req.session.game.validationErrors = [];
     next();
   }
 })
@@ -154,6 +154,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/', (req, res, next) => {
+  req.session.game.validationErrors = [];
   // process the incoming letter guess
   console.log(req.body);
   // make sure it is a single letter
