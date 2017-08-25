@@ -151,7 +151,7 @@ function createNewGame( req ) {
     word: '',
     wordAsList : [],
     lettersGuessed : [],
-    guessesRemaining: 5,
+    guessesRemaining: 8,
     validationErrors: [],
     history: {
       exists: false,
