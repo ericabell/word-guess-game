@@ -130,6 +130,13 @@ app.get('/again', (req, res, next) => {
   res.redirect('/');
 });
 
+app.get('/reset', (req, res, next) => {
+  req.session.game.history.wins = 0;
+  req.session.game.history.losses = 0;
+  res.redirect('/');
+});
+
+
 app.get('/highscores', (req, res, next) => {
   res.render('highscores');
 })
