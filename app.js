@@ -153,7 +153,7 @@ app.get('/', (req, res, next) => {
   }
 });
 
-app.post('/', (req, res, next) => {
+app.post('/guess', (req, res, next) => {
   req.session.game.validationErrors = [];
   // process the incoming letter guess
   console.log(req.body);
@@ -180,6 +180,7 @@ app.post('/', (req, res, next) => {
               req.session.game.stateWon = true;
               updateHistory(req.session.game, 'win');
               req.session.game.stateInProgress = false;
+              res.redirect('/win');
             }
             res.render('index', req.session.game);
           } else {
@@ -191,6 +192,7 @@ app.post('/', (req, res, next) => {
               req.session.game.stateLost = true;
               updateHistory(req.session.game, 'loss');
               req.session.game.stateInProgress = false;
+              res.redirect('/lose')
             }
             res.render('index', req.session.game);
           }
@@ -202,6 +204,15 @@ app.post('/', (req, res, next) => {
     })
 
 })
+
+app.get('/win', (req, res, next) => {
+  res.render('win', req.session.game);
+});
+
+app.get('/lose', (req, res, next) => {
+  res.render('lose', req.session.game);
+});
+
 
 app.get('/reset', (req, res, next) => {
   req.session.game.history.wins = 0;

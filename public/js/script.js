@@ -20,12 +20,14 @@ document.addEventListener('keypress', (e) => {
     console.log('error in sending post' + e);
   });
 
-  XHR.open('POST', 'http://localhost:3000/');
+  XHR.open('POST', 'http://localhost:3000/guess');
 
   XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   XHR.send(urlEncodedData);
 
-  // refresh the page
-  // window.location.reload();
+  // refresh the page after a short wait
+  // which prevents race condition
+  setTimeout( ()=> {window.location.reload();} , 1000);
+
 })
