@@ -53,6 +53,15 @@
           </form>
         </div> -->
 
+        <div class="guessed-letters">
+          Letters Guessed So Far:
+          <p id="guessed-letter-list">
+            {{#lettersGuessed}}
+              {{.}}
+            {{/lettersGuessed}}
+          </p>
+        </div>
+
         <div class="user-input-letter">
           Please type a key to make a guess
         </div>
