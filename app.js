@@ -119,6 +119,7 @@ app.post('/', (req, res, next) => {
           }
         } else {
           // our guess had been made before
+          req.session.game.validationErrors = {value: req.body.letter, msg: 'already guessed'};
           res.render('index', req.session.game);
         }
       }
