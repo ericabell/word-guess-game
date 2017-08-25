@@ -273,6 +273,11 @@ app.post('/sendtweet', (req, res, next) => {
   res.send('tweet sent!');
 })
 
+app.get('/timeline', (req, res, next) => {
+  console.log('Get Twitter timeline');
+  res.send('get user timeline?')
+})
+
 app.listen(3000, () => {
   console.log('Word Guess Game listening on 3000!');
 });
