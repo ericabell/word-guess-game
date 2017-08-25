@@ -31,6 +31,6 @@ document.addEventListener('keypress', (e) => {
   setTimeout( ()=> {
     console.log('reloading: ' + window.location);
     window.location.reload();
-  } , 1000);
+  } , 500);
 
 })
