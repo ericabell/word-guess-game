@@ -186,7 +186,7 @@ function askForNewGame( req ) {
   req.session.game.stateWon = false;
   req.session.game.stateLost = false;
   req.session.game.lettersGuessed = [];
-  req.session.game.guessesRemaining = 5;
+  req.session.game.guessesRemaining = 8;
   req.session.game.validationErrors = [];
   // choose a word at random
   let randInt = Math.floor(Math.random()*(words.length-1));
