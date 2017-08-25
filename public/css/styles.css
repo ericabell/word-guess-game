@@ -46,6 +46,7 @@ h1 {
   font-family: 'Roboto Mono', monospace;
   display: flex;
   justify-content: center;
+  margin: 20px 0px;
 }
 
 #guessed-letter-list {
@@ -57,7 +58,8 @@ h1 {
   color: transparent;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: rgb(135, 135, 135)
+  border-bottom-color: rgb(135, 135, 135);
+  font-size: 52pt;
 }
 
 .letter-guessed {
@@ -66,6 +68,7 @@ h1 {
   border-bottom-style: solid;
   border-bottom-width: 1px;
   border-bottom-color: rgb(93, 255, 100);
+  font-size: 52pt;
 }
 
 .letter-submit-form {
