@@ -49,6 +49,17 @@ h1 {
   border-bottom-color: rgb(135, 135, 135)
 }
 
+.guessed-letters {
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px;
+}
+
+#guessed-letter-list {
+  margin: 0 10px;
+}
+
 .letter-guessed {
   margin: 0 10px;
   color: rgb(54, 54, 54); /* set to transparent to hide letter */
