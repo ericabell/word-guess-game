@@ -20,6 +20,16 @@ const words = require('./words');
 // create our Express app
 let app = express();
 
+let Twitter = require('twitter');
+
+let client = new Twitter({
+  consumer_key: process.env.TWITTER_API_KEY,
+  consumer_secret: process.env.TWITTER_API_SECRET,
+  access_token_key: process.env.TWITTER_API_ACCESS_TOKEN,
+  access_token_secret: process.env.TWITTER_API_TOKEN_SECRET
+});
+
+
 // set up public dir for css and js
 app.use(express.static('public'));
 
@@ -181,8 +191,9 @@ app.post('/guess', (req, res, next) => {
               updateHistory(req.session.game, 'win');
               req.session.game.stateInProgress = false;
               res.redirect('/win');
+            } else {
+              res.render('index', req.session.game);
             }
-            res.render('index', req.session.game);
           } else {
             // letter didn't match
             req.session.game.guessesRemaining -= 1;
@@ -193,8 +204,9 @@ app.post('/guess', (req, res, next) => {
               updateHistory(req.session.game, 'loss');
               req.session.game.stateInProgress = false;
               res.redirect('/lose')
+            } else {
+              res.render('index', req.session.game);
             }
-            res.render('index', req.session.game);
           }
         } else {
           // our guess had been made before
@@ -246,6 +258,19 @@ app.get('/protected', requireLogin, (req, res, next) => {
   res.send('you have reached the protected page!');
 });
 
+
+app.post('/sendtweet', (req, res, next) => {
+  console.log(req.body.tweet);
+  client.post('statuses/update', {status: req.body.tweet}, (err, tweet, response) => {
+    if(err) {
+      console.log('statuses/update error');
+      throw err;
+    }
+    console.log(tweet);
+    console.log(response);
+  })
+  res.send('tweet sent!');
+})
 
 app.listen(3000, () => {
   console.log('Word Guess Game listening on 3000!');
