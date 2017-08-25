@@ -273,9 +273,21 @@ app.post('/sendtweet', (req, res, next) => {
   res.send('tweet sent!');
 })
 
-app.get('/timeline', (req, res, next) => {
-  console.log('Get Twitter timeline');
-  res.send('get user timeline?')
+app.get('/followers', (req, res, next) => {
+  console.log('Get Twitter followers');
+  client.get('followers/list' , {user_id: 'eabell_tweets'}, (err, response) => {
+    if(err) {
+      console.log('followers/list error');
+      throw err;
+    }
+    // put the response in a decent form
+    let listOfFollowers = []
+    response.users.forEach( (user) => {
+      listOfFollowers.push(user.name);
+    })
+    console.log(listOfFollowers);
+    res.render('followers', {followers: listOfFollowers});
+  })
 })
 
 app.listen(3000, () => {
